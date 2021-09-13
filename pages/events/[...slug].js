@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
-import { React, Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import useSWR from 'swr';
+import Head from 'next/head';
 
 // import {getFilteredEvents} from "../../helpers/api-util";
 import EventList from '../../components/events/event-list';
@@ -8,7 +9,7 @@ import ResultsTitle from '../../components/events/results-title';
 import Button from '../../components/ui/button';
 import ErrorAlert from '../../components/ui/error-alert';
 
-function FilteredEventsPage(props) {
+function FilteredEventsPage() {
   const [loadedEvents, setLoadedEvents] = useState();
   const router = useRouter();
 
@@ -33,9 +34,31 @@ function FilteredEventsPage(props) {
     }
   }, [data]);
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name="description" content="A list of Filtered Events" />
+    </Head>
+  );
+
   if (!loadedEvents) {
-    return <p className="center">Loading...</p>;
+    return (
+      <>
+        {pageHeadData}
+        <p className="center">Loading...</p>
+      </>
+    );
   }
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name="description"
+        content="Find a lot of great events that allow you to evolve"
+      />
+    </Head>
+  );
 
   const filteredYear = filterData[0];
   const filteredMonth = filterData[1];
@@ -53,14 +76,15 @@ function FilteredEventsPage(props) {
     error
   ) {
     return (
-      <Fragment>
+      <>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid Filter. Please Adjust your Values</p>
         </ErrorAlert>
         <div className="center">
           <Button link="/events">Show All Events</Button>
         </div>
-      </Fragment>
+      </>
     );
   }
 
@@ -74,24 +98,26 @@ function FilteredEventsPage(props) {
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
-      <Fragment>
+      <>
+        {pageHeadData}
         <ErrorAlert>
           <p>No events found for the chosen filter!</p>
         </ErrorAlert>
         <div className="center">
           <Button link="/events">Show All Events</Button>
         </div>
-      </Fragment>
+      </>
     );
   }
 
   const date = new Date(numYear, numMonth - 1);
 
   return (
-    <Fragment>
+    <>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
-    </Fragment>
+    </>
   );
 }
 

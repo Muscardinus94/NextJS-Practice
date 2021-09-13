@@ -1,7 +1,15 @@
 {
-  "plugins": ["prettier"],
-  "extends": ["eslint:recommended", "plugin:prettier/recommended", "airbnb"],
+  "plugins": ["prettier", "react"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "rules": {
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "no-unused-vars": [
+      "warn",
+      { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
+    ]
+  },
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true
   }
 }
